@@ -67,11 +67,11 @@ export default class Enemy extends SpriteEntity {
 
     radar(player) {
         if (player) {
+            const distanceX = this.body.x - player.body.x
+            const distanceY = this.body.y - player.body.y
             if (player.body.x <= this.body.x) {
-                const distanceX = this.body.x - player.body.x
-                const distanceY = this.body.y - player.body.y
                 if (distanceX <= this.radarRange && distanceY >= -10 && distanceY <= 10) {
-                    this.flipX = true
+                    this.flipX = (distanceX <= this.radarRange)
                     this.playerInradarRange = true
                     this.fire()
                 } else {
@@ -79,8 +79,6 @@ export default class Enemy extends SpriteEntity {
                     this.isShooting = false
                 }
             } else {
-                const distanceX = this.body.x - player.body.x
-                const distanceY = this.body.y - player.body.y
                 if (distanceX >= -this.radarRange && distanceY >= -10 && distanceY <= 10) {
                     this.flipX = false
                     this.playerInradarRange = true
