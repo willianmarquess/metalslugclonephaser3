@@ -38,7 +38,7 @@ export default class PlayGame extends Phaser.Scene {
         })
 
         this.obstacles = this.physics.add.staticGroup()
-    
+
         objectsLayer.objects.forEach(object => {
             const { x, y, name, width, height } = object
 
@@ -48,7 +48,7 @@ export default class PlayGame extends Phaser.Scene {
                     this.player.on('animationstart', function (anim, frame) {
                         //console.log('Playing ' + anim.key)
                         //console.log(frame)
-            
+
                     })
                     break
                 case 'enemy_spawn':
@@ -59,7 +59,7 @@ export default class PlayGame extends Phaser.Scene {
                     const rect = this.add.rectangle(x, y, width, height).setOrigin(0)
                     this.obstacles.add(rect)
                     break
-                    
+
             }
         })
 
@@ -78,15 +78,16 @@ export default class PlayGame extends Phaser.Scene {
             maxSize: -1,
             allowGravity: false
         })
+        
         this.physics.add.collider(this.obstacles, this.player)
         this.physics.add.collider(this.obstacles, this.enemies)
         this.physics.add.collider(this.enemies, this.player, (enemy, player) => {
             this.player.decreaseHp(1000)
-        })
+        }, null, this)
         this.physics.add.overlap(this.enemies, this.bullets, (enemy, bullet) => {
             enemy.decreaseHp(bullet.gameObject.attack)
             bullet.destroy()
-        })
+        }, null, this)
 
         this.physics.add.overlap(this.player, this.enemyBullets, (player, bullet) => {
             bullet.destroy()
@@ -94,8 +95,8 @@ export default class PlayGame extends Phaser.Scene {
         }, null, this)
 
         this.physics.world.setBounds(0, 0, 3455, 448)
-       this.cameras.main.startFollow(this.player, true)
-       this.cameras.main.setBounds(0, 0, 3455, 448, true)
+        this.cameras.main.startFollow(this.player, true)
+        this.cameras.main.setBounds(0, 0, 3455, 448, true)
     }
 
     update(time, deltaTime) {
@@ -103,9 +104,9 @@ export default class PlayGame extends Phaser.Scene {
 
         this.enemies.getChildren().forEach(enemy => {
             enemy.radar(this.player)
-            if(enemy.isShooting && time > (enemy.lastShot + 1050)){
+            if (enemy.isShooting && time > (enemy.lastShot + 1050)) {
                 let bullet = this.enemyBullets.get()
-                if(bullet){
+                if (bullet) {
                     bullet.setAttachGameObject(enemy, enemy.x + 20, enemy.y - 7)
                     bullet.shoot()
                     enemy.lastShot = time
@@ -114,11 +115,11 @@ export default class PlayGame extends Phaser.Scene {
         })
 
         if ((this.player.stateMachine.isCurrentState('shooting') || this.player.stateMachine.isCurrentState('crouch_fire')) && time > (this.player.lastShot + 150)) {
-            let bullet = this.bullets.get(0,0)
+            let bullet = this.bullets.get(0, 0)
             if (bullet) {
                 if (this.player.stateMachine.isCurrentState('crouch_fire')) {
                     bullet.setAttachGameObject(this.player, this.player.x + 20, this.player.y + 3)
-                }else{
+                } else {
                     bullet.setAttachGameObject(this.player, this.player.x + 20, this.player.y - 7)
                 }
                 bullet.shoot()

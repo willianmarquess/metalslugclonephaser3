@@ -54,9 +54,6 @@ export default class Enemy extends SpriteEntity {
             }
             this.lastMovementTime = number
         }
-
-        
-
     }
 
     decreaseHp(attack){
