@@ -6,6 +6,9 @@
 
 ## Live DEMO => https://willianmarquess.github.io/metalslugclonephaser3/
 
+Para executar o projeto siga os seguintes passos:
+1. abra o arquivo index.html
+
 ## Comandos para jogar :video_game:
 
 Teclas:
